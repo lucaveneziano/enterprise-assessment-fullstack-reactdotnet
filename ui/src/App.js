@@ -34,48 +34,86 @@ class App extends React.Component {
     super();
     this.state = {
       view: "feed",
+      post_id: 0,
+      error: null,
+      isLoaded: false,
+      posts: []
     };
 
     this.changeView = this.changeView.bind(this);
   }
 
-  changeView(option) {
+  changeView(option, postId=0) {
     this.setState({
       view: option,
+      post_id: postId
     });
   }
 
+  componentDidMount() {
+    fetch("https://127.0.0.1:5000/api/blogs")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoaded: true,
+            posts: result
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
   renderView() {
-    const { view } = this.state;
+    const { view, post_id } = this.state;
 
     if (view === "feed") {
-      return <Feed handleClick={() => this.changeView("anypostview")} />;
+      return <Feed handleClick={this.changeView} postData={this.state.posts} />;
     } else {
-      return <Post />;
+      let curPost;
+      this.state.posts.map((post) => {
+          if (post._id == post_id) {
+            curPost = post;
+          }
+      });
+      return <Post post={curPost} />;
     }
   }
   render() {
-    return (
-      <div>
-        <div className="nav">
-          <span className="logo" onClick={() => this.changeView("feed")}>
-            BLOGMODO
-          </span>
-          <span
-            className={
-              this.state.view === "feed" ? "nav-selected" : "nav-unselected"
-            }
-            onClick={() => this.changeView("feed")}
-          >
-            See all Posts
-          </span>
-          <span className="nav-unselected">Write a Post</span>
-          <span className="nav-unselected">Admin</span>
-        </div>
+    const { error, isLoaded } = this.state;
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
+      return <div>Loading...</div>;
+    } else {
+      return (
+        <div>
+          <div className="nav">
+            <span className="logo" onClick={() => this.changeView("feed")}>
+              BLOGMODO
+            </span>
+            <span
+              className={
+                this.state.view === "feed" ? "nav-selected" : "nav-unselected"
+              }
+              onClick={() => this.changeView("feed")}
+            >
+              See all Posts
+            </span>
+            <span className="nav-unselected">Write a Post</span>
+            <span className="nav-unselected">Admin</span>
+          </div>
 
-        <div className="main">{this.renderView()}</div>
-      </div>
-    );
+          <div className="main">{this.renderView()}</div>
+        </div>
+      );
+    }
+   
   }
 }
 

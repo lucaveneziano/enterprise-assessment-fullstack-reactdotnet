@@ -5,54 +5,27 @@ import moment from 'moment';
 class Feed extends React.Component {
   constructor(props) {
     super();
-    this.state = {
-      error: null,
-      isLoaded: false,
-      posts: []
-    };
     this.props = props;
   }
 
-  componentDidMount() {
-    fetch("https://127.0.0.1:5000/api/blogs")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            posts: result
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
-  }
+  
   render() {
-    const { error, isLoaded, posts } = this.state;
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
+    
       return (
         <div className="feed">
           <ul>
-          {posts.sort((a, b) => a.createdAt < b.createdAt ? 1 : -1).map((post) => 
+          {this.props.postData.sort((a, b) => a.createdAt < b.createdAt ? 1 : -1).map((post) => 
           <li className="feed-list-item">
-            <div className="feed-list-item-title" onClick={this.props.handleClick}>{post.title}</div>
+            <div className="feed-list-item-title" onClick={()=>this.props.handleClick("post", post._id)}>{post.title}</div>
           <div className="feed-list-item-byline"><span className="feed-list-item-byline-author">{post.author}</span> {moment(post.createdAt).fromNow()}</div>
-            <img src={post.imageUrl} onClick={this.props.handleClick} className="feed-list-item-image"/>
+            <img src={post.imageUrl} onClick={()=>this.props.handleClick("post", post._id)} className="feed-list-item-image"/>
           <span className="feed-list-item-lede">{post.body}</span>
           </li>)}
           </ul>
         </div>
         
       );
-    }
+    
     
   }
 }
