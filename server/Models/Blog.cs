@@ -1,11 +1,19 @@
 using System;
 using System.Text.Json;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace server
+namespace BlogApi.Models
 {
+    [BsonIgnoreExtraElements]
     public class Blog
     {
-        public DateTime createdAt { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }        
+
+        // [BsonElement("Name")]
+        public string createdAt { get; set; }
 
         public int views { get; set; }
 
@@ -16,8 +24,6 @@ namespace server
         public string imageUrl { get; set; }
 
         public string title { get; set; }
-
-        public string _id { get; set; }
 
         public override string ToString()
         {

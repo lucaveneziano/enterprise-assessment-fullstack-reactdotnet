@@ -12,6 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using BlogApi.Models;
+using BlogApi.Services;
+using Microsoft.Extensions.Options;
 
 namespace server
 {
@@ -27,6 +30,12 @@ namespace server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<BlogDatabseSettings>(
+                Configuration.GetSection(nameof(BlogDatabseSettings)));
+            services.AddSingleton<IBlogDatabseSettings>(sp => 
+                sp.GetRequiredService<IOptions<BlogDatabseSettings>>().Value);
+
+            services.AddSingleton<BlogService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

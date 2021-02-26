@@ -21,6 +21,8 @@ h2 {
   border-radius: 4px;
   padding: 30px 50px 0px 50px;
   box-shadow: 0 0 1em #80808066;
+  font-size:11px;
+  cursor:pointer;
 }
 
 .feed-list-item-image {
@@ -45,6 +47,47 @@ h2 {
   font-size: 0.8em;
   margin-bottom: 15px;
   color: #777777;
+}
+
+.admin-list-item{
+  margin: 20px;
+  list-style: none;
+  border: 1px solid #77777769;
+  border-radius: 4px;
+  padding: 30px 50px 30px 50px;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: black;
+  background: transparent;
+  cursor:pointer;
+}
+.admin-list-item:hover{
+  background: #77777769;
+}
+
+.admin-list-item-selected{
+  margin: 20px;
+  list-style: none;
+  border: 1px solid #77777769;
+  border-radius: 4px;
+  padding: 30px 50px 30px 50px;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: black;
+  background: #77777769;
+  cursor:pointer;  
+}
+
+.date-item{
+  font-size:0.8em;
+  font-family: 'Courier';
+  font-weight: normal;
+}
+
+.views-item{
+  font-size:0.8em;
+  font-family: 'Courier';
+  font-weight: bold;
 }
 
 .feed-list-item-byline-author {
@@ -221,6 +264,7 @@ button {
   justify-content: flex-end;
   align-items: center;
   font-family: "Francois One";
+  cursor:context-menu;
 }
 
 .nav-selected {
@@ -229,12 +273,14 @@ button {
   font-weight: bold;
   margin-right: 5px;
   font-size: 1.1em;
+  cursor:pointer;
 }
 
 .nav-unselected {
   padding: 5px;
   margin-right: 5px;
   font-size: 1.1em;
+  cursor:pointer;
 }
 
 .feed {

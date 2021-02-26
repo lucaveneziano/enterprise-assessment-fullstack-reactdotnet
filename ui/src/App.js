@@ -2,6 +2,7 @@ import React from "react";
 
 import Post from "./components/Post";
 import Feed from "./components/Feed";
+import Admin from "./components/Admin";
 
 /*
   READ THESE COMMENTS AS A PART OF STEP TWO
@@ -51,7 +52,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://127.0.0.1:5000/api/blogs")
+    fetch("https://127.0.0.1:5000/api/blog")
       .then(res => res.json())
       .then(
         (result) => {
@@ -74,23 +75,30 @@ class App extends React.Component {
 
     if (view === "feed") {
       return <Feed handleClick={this.changeView} postData={this.state.posts} />;
-    } else {
+    } 
+    else if(view === "admin"){
+      return <Admin handleClick={this.changeView} />;
+    }
+    else 
+    {
       let curPost;
       this.state.posts.map((post) => {
           if (post._id == post_id) {
             curPost = post;
           }
       });
-      return <Post post={curPost} />;
+      return <Post postid={curPost._id} />;
     }
   }
   render() {
     const { error, isLoaded } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
+    } 
+    else if (!isLoaded) {
       return <div>Loading...</div>;
-    } else {
+    } 
+    else {
       return (
         <div>
           <div className="nav">
@@ -106,14 +114,20 @@ class App extends React.Component {
               See all Posts
             </span>
             <span className="nav-unselected">Write a Post</span>
-            <span className="nav-unselected">Admin</span>
+            <span 
+              className = {
+               this.state.view === "admin" ? "nav-selected" : "nav-unselected"
+              }
+              onClick={() => this.changeView("admin")}
+            >
+              Admin
+            </span>
           </div>
 
           <div className="main">{this.renderView()}</div>
         </div>
       );
     }
-   
   }
 }
 

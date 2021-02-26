@@ -1,27 +1,62 @@
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using BlogApi.Models;
+using BlogApi.Services;
+// using server;
 
-namespace server.Controllers
+namespace BlogApi.Controllers
 {
     [ApiController]
-    [Route("api/blogs")]
+    [Route("api/[controller]")]
     public class BlogController : ControllerBase
     {
-        private readonly ILogger<BlogController> _logger;
+        private readonly BlogService _blogService;
 
-        public BlogController(ILogger<BlogController> logger)
+        public BlogController(BlogService service)
         {
-            _logger = logger;
+            _blogService = service;
         }
+
+        // [HttpGet]
+        // public List<Blog> Get(int id)
+        // {
+        //     return FakeData.getBlogs();
+        // }
 
         [HttpGet]
         public List<Blog> Get()
         {
-            return FakeData.getBlogs();
+            List<Blog> ary = _blogService.Get();
+            return ary;
         }
+        
+        [HttpGet("{id:length(24)}", Name="blog")]
+        public Blog Get(string id)
+        {
+            var blog = _blogService.Get(id);
+            if(blog == null)
+            {
+                return null;
+            }
+            return blog;
+        }
+
+        /*
+            Reserved Area for Create, Update and Delete Service.
+
+            [HttpPost]
+            public ActionResult<Blog> Create(Blog blog)
+            {
+                _blogService.Create(blog);
+                return CreatedAtRoute("blog", new {id = blog._id.ToString()}, blog);
+            }
+            
+            ...
+        */
     }
 }
