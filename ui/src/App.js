@@ -1,6 +1,7 @@
 import React from "react";
 
 import Post from "./components/Post";
+import CreatePost from "./components/CreatePost";
 import Feed from "./components/Feed";
 import Admin from "./components/Admin";
 
@@ -42,6 +43,7 @@ class App extends React.Component {
     };
 
     this.changeView = this.changeView.bind(this);
+    this.loadPosts = this.loadPosts.bind(this);
   }
 
   changeView(option, postId=0) {
@@ -51,7 +53,7 @@ class App extends React.Component {
     });
   }
 
-  componentDidMount() {
+  loadPosts(){
     fetch("https://127.0.0.1:5000/api/blog")
       .then(res => res.json())
       .then(
@@ -68,6 +70,11 @@ class App extends React.Component {
           });
         }
       )
+      this.setState({view: "feed"});
+  }
+
+  componentDidMount() {
+    this.loadPosts();
   }
 
   renderView() {
@@ -76,6 +83,9 @@ class App extends React.Component {
     if (view === "feed") {
       return <Feed handleClick={this.changeView} postData={this.state.posts} />;
     } 
+    else if(view === "create"){
+      return <CreatePost reloadPosts={this.loadPosts} />;
+    }
     else if(view === "admin"){
       return <Admin handleClick={this.changeView} />;
     }
@@ -113,7 +123,10 @@ class App extends React.Component {
             >
               See all Posts
             </span>
-            <span className="nav-unselected">Write a Post</span>
+            <span className = {
+               this.state.view === "create" ? "nav-selected" : "nav-unselected"
+              }
+              onClick={() => this.changeView("create")}>Write a Post</span>
             <span 
               className = {
                this.state.view === "admin" ? "nav-selected" : "nav-unselected"

@@ -27,7 +27,7 @@ namespace BlogApi.Controllers
         // {
         //     return FakeData.getBlogs();
         // }
-
+        
         [HttpGet]
         public List<Blog> Get()
         {
@@ -46,6 +46,16 @@ namespace BlogApi.Controllers
             return blog;
         }
 
+        [HttpPost]
+        public ActionResult<Blog> Create([FromForm] Blog blog)
+        {
+            blog.createdAt = DateTime.UtcNow.ToString("yyyy-MM-dd h:mm:ss");
+          
+            _blogService.Create(blog);
+
+            return blog;
+            //return CreatedAtRoute("blog", new {id = blog._id.ToString()}, blog);
+        }
         /*
             Reserved Area for Create, Update and Delete Service.
 

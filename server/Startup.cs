@@ -36,6 +36,7 @@ namespace server
                 sp.GetRequiredService<IOptions<BlogDatabseSettings>>().Value);
 
             services.AddSingleton<BlogService>();
+			
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
